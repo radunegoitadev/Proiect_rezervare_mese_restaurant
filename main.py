@@ -55,8 +55,6 @@ class userDB(baza):
     username = Column(String, unique=True, index=True)
     parola_criptata = Column(String)
 
-baza_date: list[rezervare] = []
-
 baza.metadata.create_all(bind = engine)
 
 app = FastAPI()
@@ -71,6 +69,17 @@ app.add_middleware(
 @app.post("/Adaugarerezervare")
 def adauga_rezervare(interval: rezervare):
     db = sesiune_locala()
+    timp_curent = datetime.now()
+    durata = interval.end - interval.start
+    if interval.start.minute != 0 or interval.start.second != 0:
+        db.close()
+        raise HTTPException(status_code=400, detail="Rezervarile se pot face doar la ore fixe")
+    if timp_curent > interval.start:
+        db.close()
+        raise HTTPException(status_code=400, detail="Nu puteti folosi o data din trecut")
+    if durata.total_seconds() != 7200:
+        db.close()
+        raise HTTPException(status_code=400, detail="Rezervarea trebuie sa dureze fix 2 ore")
     conflict = db.query(rezervareDB).filter(
         rezervareDB.masa == interval.masa,
         interval.start < rezervareDB.check_out,
@@ -102,7 +111,7 @@ def sterge_rezervare(id: int):
         db.delete(rezervare)
         db.commit()
         db.close()
-        return {"Status": "Sters cu succes", "message": f"Rezervarea cu numarul {id} a fost ștearsă"}
+        return {"Status": "Sters cu succes", "message": f"Rezervarea pe numele {rezervare.nume_client} cu id-ul {id} a fost ștearsă"}
     db.close()
     raise HTTPException(status_code=404, detail="Rezervarea nu a fost găsită")
 
@@ -162,6 +171,19 @@ def vizualizare_utilizatori():
     Utilizatori_inregistrati_inbaza = db.query(userDB).all()
     db.close()
     return Utilizatori_inregistrati_inbaza
+
+@app.delete("/Stergere_Utilizator/{id}")
+def Stergere_utlilizator(id: int):
+    db = sesiune_locala()
+    cautat = db.query(userDB).filter(userDB.id == id).first()
+    if cautat:
+        db.delete(cautat)
+        db.commit()
+        db.close()
+        return{"Status":f"Utilizator {cautat.username} sters cu succes"}
+    else:
+        db.close()
+        raise HTTPException(status_code=404, detail="Utilizatorul nu exista")
     
 if __name__=="__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
