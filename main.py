@@ -72,6 +72,7 @@ class rezervareDB(baza):
     masa = Column(Integer)
     check_in = Column(DateTime)
     check_out = Column(DateTime)
+    status = Column(String)
 
 class userDB(baza):
     __tablename__ = "Users"
@@ -109,30 +110,27 @@ def adauga_rezervare(interval: rezervare, db: Session = Depends(get_db)):
     if conflict:
         raise HTTPException(status_code=400,detail="Intervalul selectat nu este disponibil")
     else:
-        noua_rezervare = rezervareDB(nume_client = interval.nume, masa = interval.masa, check_in = interval.start, check_out = interval.end)
+        noua_rezervare = rezervareDB(nume_client = interval.nume, masa = interval.masa, check_in = interval.start, check_out = interval.end, status = "Nedeterminat")
         db.add(noua_rezervare)
         db.commit()
         return{"Status": "Rezervarea a fost salvata in baza de date"}
 
 
-@app.get("/toaterezervarile")
+@app.get("/Afiseaza_Rezervarile")
 def primesterezervari(db: Session = Depends(get_db), user_logat = Depends(utilizator_curent)):
     if user_logat.rol != "admin":
         raise HTTPException(status_code=403, detail="Forbidden acces")
-    rezervari = db.query(rezervareDB).all()
-    return rezervari
-
-@app.delete("/rezervari/{id}")
-def sterge_rezervare(id: int, user_logat = Depends(utilizator_curent), db: Session = Depends(get_db)):
-    rezervare = db.query(rezervareDB).filter(rezervareDB.id == id).first()
-    if rezervare and user_logat.rol == "admin":
-        db.delete(rezervare)
-        db.commit()
-        return {"Status": "Sters cu succes", "message": f"Rezervarea pe numele {rezervare.nume_client} cu id-ul {id} a fost ștearsă"}
-    elif rezervare and user_logat.rol =="client":
-        raise HTTPException(status_code=403, detail="Acces nepermis")
-    else :
-        raise HTTPException(status_code=404, detail="Rezervarea nu a fost găsită")
+    rezervari_upcoming = db.query(rezervareDB).filter(rezervareDB.check_in > datetime.now()).all()
+    for i in rezervari_upcoming:
+        i.status = "Upcoming"
+    rezervari_in_progres = db.query(rezervareDB).filter(rezervareDB.check_in < datetime.now(), rezervareDB.check_out > datetime.now()).all()
+    for j in rezervari_in_progres:
+        j.status = "Activa"
+    rezervari_finalizate = db.query(rezervareDB).filter(rezervareDB.check_out < datetime.now()).all()
+    for k in rezervari_finalizate:
+        k.status = "Finalizata"
+    lista_rezervari = rezervari_upcoming + rezervari_in_progres + rezervari_finalizate
+    return lista_rezervari
 
 @app.get("/Nr_rezervari")
 def numar_rezervari(db: Session = Depends(get_db), utilizator_logat = Depends(utilizator_curent)):
@@ -197,6 +195,11 @@ def vizualizare_utilizatori(db: Session = Depends(get_db), utilizator_logat = De
     Utilizatori_inregistrati_inbaza = db.query(userDB).all()
     return Utilizatori_inregistrati_inbaza
 
+@app.get("/Vezi_propriile_rezervari")
+def Vezi_propria_rezervare(db: Session = Depends(get_db), utilizator_logat = Depends(utilizator_curent)):
+    rezervari = db.query(rezervareDB).filter(rezervareDB.nume_client == utilizator_logat.username).all()
+    return {"mesaj": "Aveti urmatoarele rezervari :", "rezervari": rezervari}
+
 @app.delete("/Stergere_Utilizator/{id}")
 def Stergere_utlilizator(id: int, db: Session = Depends(get_db), Utilizator_logat = Depends(utilizator_curent)):
     if Utilizator_logat.rol != "admin":
@@ -208,6 +211,18 @@ def Stergere_utlilizator(id: int, db: Session = Depends(get_db), Utilizator_loga
         return{"Status":f"Utilizator {cautat.username} sters cu succes"}
     else:
         raise HTTPException(status_code=404, detail="Utilizatorul nu exista")
+    
+@app.delete("/Stergere_Rezervare/{id}")
+def Sterge_rezervare(id: int, user_logat = Depends(utilizator_curent), db: Session = Depends(get_db)):
+    rezervare = db.query(rezervareDB).filter(rezervareDB.id == id).first()
+    if rezervare and user_logat.rol == "admin":
+        db.delete(rezervare)
+        db.commit()
+        return {"Status": "Sters cu succes", "message": f"Rezervarea pe numele {rezervare.nume_client} cu id-ul {id} a fost ștearsă"}
+    elif rezervare and user_logat.rol =="client":
+        raise HTTPException(status_code=403, detail="Acces nepermis")
+    else :
+        raise HTTPException(status_code=404, detail="Rezervarea nu a fost găsită")
     
 if __name__=="__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
