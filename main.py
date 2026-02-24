@@ -43,21 +43,22 @@ def utilizator_curent(token: str = Depends(oath2scheme), db : Session = Depends(
         if username == None:
             raise HTTPException(status_code=403, detail="Token invalid")
     except JWTError:
-        raise HTTPException(status_code="402", detail="Eroare la procesarea tokenului")
+        raise HTTPException(status_code=401, detail="Eroare la procesarea tokenului")
     user = db.query(userDB).filter(userDB.username == username).first()
     if not user:
         raise HTTPException(status_code=404, detail="Utilizatorul nu exista")
     else:
         return user
 
-database_url = "sqlite:///./rezervari.db"
-engine = create_engine(database_url, connect_args={"check_same_thread": False})
+database_url = "postgresql://postgres:radualexia2515@localhost:5432/Restaurant"
+engine = create_engine(database_url)
 sesiune_locala = sessionmaker(autoflush = False, autocommit = False, bind=engine)
 baza = declarative_base()
 
 class rezervare(BaseModel): 
     nume : str
     masa : int
+    persoane : int
     start : datetime
     end : datetime
 
@@ -65,11 +66,15 @@ class UserCreate(BaseModel):
     username : str
     password : str
 
+class masa(BaseModel):
+    capacitate : int
+
 class rezervareDB(baza):
     __tablename__ = "Rezervari"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nume_client = Column(String)
     masa = Column(Integer)
+    persoane = Column(Integer)
     check_in = Column(DateTime)
     check_out = Column(DateTime)
     status = Column(String)
@@ -80,6 +85,12 @@ class userDB(baza):
     username = Column(String, unique=True, index=True)
     parola_criptata = Column(String)
     rol = Column(String)
+
+class meseDB(baza):
+    __tablename__ = "Mese"
+    numar = Column(Integer,autoincrement=True,primary_key=True,unique=True)
+    capacitate = Column(Integer)
+
 
 baza.metadata.create_all(bind = engine)
 
@@ -107,13 +118,19 @@ def adauga_rezervare(interval: rezervare, db: Session = Depends(get_db)):
         interval.start < rezervareDB.check_out,
         interval.end > rezervareDB.check_in
     ).first()
-    if conflict:
-        raise HTTPException(status_code=400,detail="Intervalul selectat nu este disponibil")
+    masa_cautata = db.query(meseDB).filter(meseDB.numar == interval.masa).first()
+    if not masa_cautata:
+        raise HTTPException(status_code=400, detail="Masa cautata nu exista")
+    if masa_cautata.capacitate >= interval.persoane:
+        if conflict:
+            raise HTTPException(status_code=400,detail="Intervalul selectat nu este disponibil")
+        else:
+            noua_rezervare = rezervareDB(nume_client = interval.nume, masa = interval.masa, check_in = interval.start, check_out = interval.end, status = "Nedeterminat")
+            db.add(noua_rezervare)
+            db.commit()
+            return{"Status": "Rezervarea a fost salvata in baza de date"}
     else:
-        noua_rezervare = rezervareDB(nume_client = interval.nume, masa = interval.masa, check_in = interval.start, check_out = interval.end, status = "Nedeterminat")
-        db.add(noua_rezervare)
-        db.commit()
-        return{"Status": "Rezervarea a fost salvata in baza de date"}
+        raise HTTPException(status_code=400, detail="Masa nu are loc pentru atatea persoane")
 
 
 @app.get("/Afiseaza_Rezervarile")
@@ -215,14 +232,24 @@ def Stergere_utlilizator(id: int, db: Session = Depends(get_db), Utilizator_loga
 @app.delete("/Stergere_Rezervare/{id}")
 def Sterge_rezervare(id: int, user_logat = Depends(utilizator_curent), db: Session = Depends(get_db)):
     rezervare = db.query(rezervareDB).filter(rezervareDB.id == id).first()
+    if user_logat.rol != "admin":
+        raise HTTPException(status_code=403, detail="Acces nepermis")
+    if not rezervare:
+        raise HTTPException(status_code=404, detail="Rezervarea nu a putut fi gasita")
+    nume = rezervare.nume_client
     if rezervare and user_logat.rol == "admin":
         db.delete(rezervare)
         db.commit()
-        return {"Status": "Sters cu succes", "message": f"Rezervarea pe numele {rezervare.nume_client} cu id-ul {id} a fost ștearsă"}
-    elif rezervare and user_logat.rol =="client":
-        raise HTTPException(status_code=403, detail="Acces nepermis")
-    else :
-        raise HTTPException(status_code=404, detail="Rezervarea nu a fost găsită")
+        return {"Status": "Sters cu succes", "message": f"Rezervarea pe numele {nume} cu id-ul {id} a fost ștearsă"}
     
+@app.post("/Adaugare_masa/{nr}")
+def Adaugare_masa(nr: int, user_logat = Depends(utilizator_curent), db : Session = Depends(get_db)):
+        if user_logat.rol != "admin":
+            raise HTTPException(status_code=403, detail="Forbidden")
+        masa_noua = meseDB(capacitate=nr)
+        db.add(masa_noua)
+        db.commit()
+        return{"Status":"Succes", "detalii":"Masa a fost adaugata cu succes"}
+
 if __name__=="__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
