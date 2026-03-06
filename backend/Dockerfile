@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install fastapi uvicorn sqlalchemy passlib "bcrypt==4.0.1" python-jose[cryptography] numpy python-multipart fastapi-mail
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8000
 

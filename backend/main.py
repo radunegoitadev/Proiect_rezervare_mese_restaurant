@@ -62,7 +62,7 @@ def utilizator_curent(token: str = Depends(oath2scheme), db : Session = Depends(
     else:
         return user
 
-database_url = "postgresql://postgres:radualexia2515@localhost:5432/Restaurant"
+database_url = "postgresql://postgres:radualexia2515@db:5432/Restaurant_db"
 engine = create_engine(database_url)
 sesiune_locala = sessionmaker(autoflush = False, autocommit = False, bind=engine)
 baza = declarative_base()

@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: radualexia2515
+      POSTGRES_DB: restaurant_db
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:parola_ta_postgre@db:5432/Restaurant_db
+
+  frontend:
+    build: ./restaurant-app
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
