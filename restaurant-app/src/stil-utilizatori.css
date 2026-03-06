@@ -1,0 +1,132 @@
+.container-meniuri{
+    width: 100%;
+    height: auto;
+    background-image: url(../public/—Pngtree—photo\ of\ a\ black\ slate_12816839.jpg);
+    display: flex;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    gap: 60px;
+}
+
+.meniu{
+    width: 400px;
+    height: 700px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    border: 1px solid rgba(1, 1, 1, 0.5);
+    transition: 0.1s;
+}
+
+.meniu:hover{
+    transform:  translateY(-5px);
+    box-shadow: 0 0px 25px rgba(1,1,1,1);
+}
+
+.meniu h2{
+    text-align: center;
+    font-size: 40px;
+    color: green;
+    font-family:'Lavishly Yours';
+    border: 2px solid rgba(0,0,0,0.2);
+    background-color: rgba(47, 79, 79, 0.7);
+    border-radius: 40px;
+}
+
+.meniu p{
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-top: 35px;
+    color: white;
+    font-family: 'Molle';
+    font-size: 24px;
+    border-radius: 23px;
+    background-color: green;
+}
+
+.container-contact{
+    width: 100%;
+    height: auto;
+    display: flex;
+    background-color: #161821;
+    display: flex;
+}
+
+.informatii-contact{
+    height: 500px;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    width: 700px;
+    text-align: center;
+}
+
+.informatii-contact h3{
+    font-family: 'Dosis';
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.formular-contact{
+    height: 300px;
+}
+
+.formular-contact form{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: auto;
+    padding: 10px;
+    margin-left: 600px;
+}
+
+.formular-contact form h2{
+    font-family: 'Dosis';
+    color: white;
+}
+
+.formular-contact form input{
+    font-family: 'Dosis';
+    font-size: 18px;
+    height: 25px;
+    width: 200px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.formular-contact form button{
+    font-family: 'Dosis';
+    font-weight: bold;
+    margin-top: 100px;
+    margin-left: 0px;
+    margin-bottom: 80px;
+    align-self: baseline;
+    width: 200px;
+    height: 50px;
+    background-color: green;
+    border-radius: 80px;
+    font-size: 18px;
+}
+
+.formular-contact textarea{
+    font-family: 'Dosis';
+    height: 30px;
+    padding: 20px;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.footer{
+    text-align: center;
+    background-color: #161821;
+    color: white;
+}
+
+.footer h2{
+    font-family: 'Dosis';
+    margin-top: 0px;
+    border-top: 1px solid rgba(58, 62, 66,0.4);
+    margin-bottom: 0px;
+    height: 50px;
+}

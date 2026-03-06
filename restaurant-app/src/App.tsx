@@ -1,0 +1,278 @@
+import './style.css'
+import './stil-utilizatori.css'
+import React, { useState } from 'react'
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import Tabel_utilizatori from './Tabel_utilizatori';
+import Tabel_rezervari from '../src/Tabel_rezervari';
+
+function App() {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const navigate = useNavigate();
+
+  const [LoginUser, setLoginUser] = useState('');
+  const [LoginPassword, setLoginPassword] = useState('');
+  const [RegisterUsername, setRegisterUsername] = useState('');
+  const [RegisterPassword, setRegisterPassword] = useState('');
+
+  const [LoggedinUser, setLoggedinUser] = useState<string | null>(null);
+
+  const [mail, setmail] = useState('');
+  const [sub, setsub] = useState('');
+  const [mes, setmes] = useState('');
+
+  const scroll_to_Contact = () => {
+    const element = document.getElementById("foot")
+    if(element){
+      element.scrollIntoView({behavior: 'smooth'})
+    }
+  }
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+        const response = await fetch('http://localhost:8000/Login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: LoginUser,
+                password: LoginPassword
+            }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem('token', data.access_token);
+            setLoggedinUser(LoginUser);
+            alert("Autentificare reușită!");
+            setShowLogin(false);
+        } else {
+            alert("Eroare: " + (data.detail || "Ceva nu a mers bine"));
+        }
+    } catch (error) {
+        console.error("Eroare la conexiunea cu serverul:", error);
+        alert("Serverul backend nu este pornit!");
+    }
+};
+
+const handleRegister = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try{
+    const response = await fetch('http://localhost:8000/register', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: RegisterUsername,
+        password: RegisterPassword
+      }),
+    });
+
+    const data = await response.json();
+
+    if(response.ok && !data.Error){
+      alert("Inregistrare reusita!")
+      setShowRegister(false);
+    } else{
+      alert(data.Error)
+    }
+
+
+  } catch (error) {
+    console.error("Eroare la conexiunea cu severul:", error);
+    alert("Serverul de backend nu este pornit")
+  }
+  
+
+}
+
+
+const handlemail = async (e : React.FormEvent) => {
+  e.preventDefault();
+
+  try{
+    const response = await fetch('http://localhost:8000/Trimite_mail', {
+      method: 'POST',
+      headers: {'Content-type': 'application/json'},
+      body: JSON.stringify({
+        email: mail,
+        subiect: sub,
+        mesaj: mes
+      })
+    })
+
+    const data = await response.json();
+
+    if(response.ok){
+      alert("Vă mulțumim pentru mesaj.");
+      setmail('');
+      setmes('');
+      setsub('');
+    }else{
+      alert(data.detail)
+    }
+  }catch(error){
+    return("Serverul de backend nu functioneaza")
+  }
+}
+
+  return (
+    <div className="app-container">
+      <section id="nav">
+        <img className='logo' src='/logo.png' alt="" />
+        <ul id="lista">
+          {LoggedinUser ? (
+            <>
+              {
+                LoggedinUser == "radu" ? (
+                <>
+                  <li className='welcome'>Welcome,admin!</li>
+                  <li style={{cursor: 'pointer'}} onClick={() =>  navigate("/")}>Acasa</li>
+                  <li style={{cursor: 'pointer'}} className='logout' onClick={() => {localStorage.removeItem('token'); setLoggedinUser(null); alert("Logged out")}}>Logout</li>
+                </>
+                ) : (
+                  <>
+                    <li className='welcome'>Welcome,{LoggedinUser}!</li>
+                    <li onClick={() => navigate("/")}>Acasa</li>
+                    <li style={{cursor: 'pointer'}} onClick={scroll_to_Contact}>Contact</li>
+                    <li style={{cursor: 'pointer'}} className='logout' onClick={() => {localStorage.removeItem('token'); setLoggedinUser(null); alert("Logged out")}}>Logout</li>
+                  </>
+                )
+              }
+            </>
+          ) : (
+            <>
+              <li style={{cursor: "pointer"}}>Acasa</li>
+              <li onClick={() => {setShowLogin(!showLogin); setShowRegister(false); setLoginUser(''); setLoginPassword('')}} style={{cursor: 'pointer'}}>Login</li>
+              <li onClick={() => {setShowRegister(!showRegister);setShowLogin(false); setRegisterUsername(''); setRegisterPassword('')}} style={{cursor: 'pointer'}}>Register</li>
+              <li style={{cursor: 'pointer'}} onClick={scroll_to_Contact}>Contact</li>
+            </>
+          )}
+        </ul>
+      </section>
+
+  <Routes> 
+    <Route path='/' element = {
+      <>
+        <div className={`login-overlay ${showLogin ? 'open' : ''}`}>
+          <form onSubmit={handleLogin} className="login-form">
+            <h2>Autentificare</h2>
+            <input value={LoginUser} onChange={(e) => setLoginUser(e.target.value)} type="text" placeholder="Username" />
+            <input value={LoginPassword} onChange={(e) => setLoginPassword(e.target.value)} type="password" placeholder="Parola" />
+            <button type="submit">Intra in cont</button>
+         </form>
+        </div>
+
+        <div className={`register-overlay ${showRegister ? 'open' : ''}`}>
+          <form onSubmit={handleRegister} className="register-form">
+            <h2>Inregistrare</h2>
+            <input value={RegisterUsername} onChange={(e) => setRegisterUsername(e.target.value)} type="text" placeholder='Username' autoFocus />
+            <input value={RegisterPassword} onChange={(e) => setRegisterPassword(e.target.value)} type="password" placeholder='Parola' />
+            <button type='submit'>Creeaza un cont</button>
+          </form>
+        </div>
+
+        <section id="content">
+          <div id="descriere">
+            <h1>Pasiunea ne defineste</h1>
+            <h1>Mancarea ne recomanda</h1>
+          </div>
+          {LoggedinUser == 'radu' ?(
+          <>
+            <div id='dashboardadmin'>
+              <div onClick={() => navigate('/admin/rezervari')} className='admin-card' style={{cursor: 'pointer'}}>
+                <i className="fas fa-list"></i>
+                <h3>Arata toate rezervarile</h3>
+                <p>Gestionează fluxul de clienți în timp real.</p>
+              </div>
+              <div onClick={() => navigate('/admin/utilizatori')} className='admin-card' style={{cursor: 'pointer'}}>
+                <i className="fas fa-users"></i>
+                <h3>Vezi toti utilizatorii</h3>
+                <p>Administrează conturile și permisiunile.</p>
+              </div>
+              <div className='admin-card delete' style={{cursor: 'pointer'}}>
+                <i className="fas fa-trash-alt"></i>
+                <h3>Sterge o rezervare</h3>
+                <p>Elimină rezervările anulate sau eronate.</p>
+              </div>
+            </div>
+          </>
+          ): (
+            <>
+              <div className='container-meniuri'>
+                <div className='meniu'>
+                  <h2>PASTE</h2>
+                  <p>Paste Alfredo cu pui .... 48lei</p>
+                  <p>Paste Mac and Cheese .... 45lei</p>
+                  <p>Paste cu somon și roșii .... 50lei</p>
+                  <p>Lasagna .... 42lei</p>
+                  <p>Spaghetti Bolognese .... 55lei</p>
+                  <p>Gnocchi cu sos de roșii în stil italian .... 60lei</p>
+                </div>
+                <div className='meniu'>
+                  <h2>PIZZA</h2>
+                  <p>Pizza cu pui și sos pesto .... 30lei</p>
+                  <p>Pizza cu sparanghel și sos pesto .... 26lei</p>
+                  <p>Pizza la cuptor cu lemne și aluat cu dospire lentă .... 32lei</p>
+                  <p>Pizza Margherita .... 30lei</p>
+                  <p>Pizza Quattro Formaggi .... 30lei</p>
+                  <p>Pizza Quattro Stagioni .... 30lei</p>
+                </div>
+                <div className='meniu'>
+                  <h2>PESTE</h2>
+                  <p>Scoici în sos de roșii .... 40lei</p>
+                  <p>Creveți Saganaki .... 50lei</p>
+                  <p>Păstrăv la Grătar .... 35lei</p>
+                  <p>Calamari prăjiți .... 30lei</p>
+                  <p>Somon la cuptor, cu sparanghel .... 50lei</p>
+                  <p>Noodles chinezești cu creveți și legume .... 28lei</p>
+                </div>
+                <div className='meniu'>
+                  <h2>SALATE</h2>
+                  <p>Salată Caesar cu Pui .... 40lei</p>
+                  <p>Salată libaneză de varză .... 30lei</p>
+                  <p>Salată Grecească cu Pui și Avocado .... 35lei</p>
+                  <p>Salată Caesar cu Creveți .... 43lei</p>
+                  <p></p>
+                  <p></p>
+                </div>
+              </div>
+              <div className='container-contact'>
+                <div className='informatii-contact'>
+                  <h3>Ne puteți scrie la adresa radu.negoita.dev@gmail.com</h3>
+                  <h3>Tel Contact: 0731754283</h3>
+                  <h3>Adresa: Str. Stefan Baciu nr.42</h3>
+                </div>
+                <div className='formular-contact'>
+                  <form onSubmit={handlemail} action="submit">
+                    <h2>Părerea ta contează</h2>
+                    <input required value={mail} onChange={(e) => setmail(e.target.value)} placeholder='Introduceți Email-ul' type="email" />
+                    <input required value={sub} onChange={(e) => setsub(e.target.value)} placeholder='Subiect' type="text" />
+                    <textarea required value={mes} onChange={(e) => setmes(e.target.value)} placeholder='Mesaj' name="Mesaj" id="m"></textarea>
+                    <button type='submit'>Trimite</button>
+                  </form>
+                </div>
+              </div>
+            </>
+          )}
+          <div id='foot' className='footer'>
+            <h2>©2026 All Rights Reserved</h2>
+          </div>
+        </section>  
+      </>  
+    } />
+
+    <Route path="/admin/utilizatori" element={LoggedinUser === 'radu' ? <Tabel_utilizatori /> : <Navigate to="/" />} />
+    <Route path="/admin/rezervari" element={LoggedinUser === 'radu' ? <Tabel_rezervari /> : <Navigate to="/" />} />
+  </Routes>
+  </div>
+  );
+}
+
+export default App;

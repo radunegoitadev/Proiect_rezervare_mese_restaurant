@@ -1,0 +1,374 @@
+#lista{
+    margin-top: 20px;
+    text-align: right;
+    margin-right: 100px;
+}
+
+
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden; 
+}
+
+#nav #lista li{
+    display: inline;
+    margin-left: 20px;
+    font-size: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    width: 100px;
+    height: 100px;
+}
+
+#nav {
+    background-color: green;
+    color: white;
+    padding-top: 0px;
+    height: 70px;
+    display: flex;
+}
+
+
+
+#lista li:hover{
+    color: green;
+    border: 3px solid transparent;
+    border-radius: 10px;
+    background-color: white;
+    padding: 5px;
+}
+
+#descriere{
+    width: 100%;
+    height: 900px;
+    background-image: url(../public/2143097-1920x1080-desktop-1080p-healthy-food-background-photo.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+#descriere h1{
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 1px 1px 10px ;
+    letter-spacing: 10px;
+    color: bisque;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    font-size: 50px;
+}
+
+#l1{
+    display: grid;
+    width: 100px;
+    height: 100px;
+    color: blue;
+    z-index: 3;
+}
+
+.login-overlay {
+    position: fixed;
+    top: -475px;
+    left: 1450px;
+    width: 246px;
+    height: 320px;
+    color: white;
+    z-index: 5;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-overlay.open {
+    transform: translateY(550px);
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 200px;
+    padding: 20px;
+    border: 3px solid transparent;
+    border-radius: 10px;
+    background-color: green;
+}
+
+.login-form h2 {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-form input {
+    padding: 12px;
+    border-radius: 5px;
+    border: none;
+    font-size: 18px;
+    color: black;
+}
+
+.login-form button {
+    padding: 12px;
+    background-color: white;
+    color: green;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#lista{
+    height: 50px;
+    margin-left: 1200px;
+}
+
+.logo{
+    width: 70px;
+    height: 70px;
+    margin-left: 100px;
+}
+
+.register-overlay {
+    position: fixed; 
+    top: -475px;
+    left: 1550px;
+    width: 246px;
+    height: 320px;
+    color: white;
+    z-index: 5;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-overlay.open {
+    transform: translateY(550px);
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 200px;
+    padding: 20px;
+    border: 3px solid transparent;
+    border-radius: 10px;
+    background-color: green;
+}
+
+.register-form h2 {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.register-form input {
+    padding: 12px;
+    border-radius: 5px;
+    border: none;
+    font-size: 18px;
+    color: black;
+}
+
+.register-form button {
+    padding: 12px;
+    background-color: white;
+    color: green;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#lista li.welcome{
+    color: yellow;
+    font-weight: bold;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+#lista li.welcome:hover{
+    background-color: green;
+    border-radius: 5px;
+}
+
+nav .logout{
+    color: red;
+    transition: all 0.2s ease;
+}
+
+#lista li.logout:hover{
+    color: white;
+    background-color: red;
+    border-radius: 10px;
+    border: 3px solid transparent;
+}
+
+#lista li:hover{
+    transition: all 0.2s ease;
+}
+
+#dashboardadmin {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    padding: 50px 10%;
+    background-color: darkslategrey;
+}
+
+.admin-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    border-bottom: 5px solid #4CAF50;
+}
+
+.admin-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.admin-card h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.admin-card p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.admin-card.delete {
+    border-bottom: 5px solid red;
+}
+
+.admin-container {
+    padding: 40px 10%;
+    background-color: #f9f9f9;
+    min-height: 80vh;
+    text-align: center;
+}
+
+.admin-container h2 {
+    color: #333;
+    margin-bottom: 30px;
+    font-family: 'Arial', sans-serif;
+    border-bottom: 3px solid #4CAF50;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.utilizatori-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.utilizatori-table th {
+    background-color: #2e7d32;
+    color: white;
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.utilizatori-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    color: #444;
+    font-size: 15px;
+}
+
+.utilizatori-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.utilizatori-table tr:hover {
+    background-color: #e8f5e9;
+    transition: 0.3s;
+}
+
+.password-cell {
+    font-family: monospace;
+    font-size: 12px;
+    color: #888;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-actions-bar {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.delete-section {
+    display: flex;
+    gap: 10px;
+}
+
+.input-delete {
+    padding: 12px 15px;
+    border: 2px solid #eee;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    width: 200px;
+    transition: all 0.3s ease;
+}
+
+.input-delete:focus {
+    border-color: #ff4d4d;
+    box-shadow: 0 0 8px rgba(255, 77, 77, 0.2);
+}
+
+.btn-action-delete {
+    padding: 12px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-action-delete:hover {
+    background-color: #d32f2f;
+}
+
+.btn-back {
+    margin-top: 0;
+    padding: 12px 25px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
