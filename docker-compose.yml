@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: radualexia2515
-      POSTGRES_DB: restaurant_db
+      POSTGRES_DB: Restaurant_db
     ports:
       - "5432:5432"
 
@@ -17,7 +17,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://postgres:parola_ta_postgre@db:5432/Restaurant_db
+      - DATABASE_URL=postgresql://postgres:radualexia2515@db:5432/Restaurant_db
 
   frontend:
     build: ./restaurant-app
