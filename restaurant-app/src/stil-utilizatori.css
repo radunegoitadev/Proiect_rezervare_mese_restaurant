@@ -13,15 +13,17 @@
 .meniu{
     width: 400px;
     height: 700px;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    border: 1px solid rgba(1, 1, 1, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     transition: 0.1s;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .meniu:hover{
     transform:  translateY(-5px);
-    box-shadow: 0 0px 25px rgba(1,1,1,1);
+    box-shadow: 0 8px 25px rgba(1,1,1,1);
 }
 
 .meniu h2{
@@ -29,8 +31,8 @@
     font-size: 40px;
     color: green;
     font-family:'Lavishly Yours';
-    border: 2px solid rgba(0,0,0,0.2);
-    background-color: rgba(47, 79, 79, 0.7);
+    border: 1px solid rgba(0,0,0,0.2);
+    background-color: rgba(255, 255, 255, 1);
     border-radius: 40px;
 }
 
@@ -42,7 +44,6 @@
     font-family: 'Molle';
     font-size: 24px;
     border-radius: 23px;
-    background-color: green;
 }
 
 .container-contact{

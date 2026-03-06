@@ -274,8 +274,9 @@ async def Mail(data: contact):
     message = MessageSchema(
         subject=f"Mesaj nou de la {data.email}: {data.subiect}",
         recipients= ["iamradubtwsss@gmail.com"],
-        body=f"Ai primit un mesaj nou de la {data.email}:\n\n{data.mesaj}",
-        subtype= MessageType.plain
+        body=f"{data.mesaj}",
+        subtype= MessageType.plain,
+        reply_to=[data.email]
     )
     
     fm = FastMail(conf)
