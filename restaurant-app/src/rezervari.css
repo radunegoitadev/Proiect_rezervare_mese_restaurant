@@ -1,0 +1,188 @@
+.wrapper{
+    display: flex;
+    justify-content: flex-start;
+    text-align: center;
+    width: 100%;
+    min-height: 100vh;
+    flex-direction: column;
+    background-color: #161821;
+}
+
+.interval{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: auto;
+    max-height: 20vh;
+    font-family: 'Dosis';
+    padding: 20px;
+    gap: 10px;
+}
+
+.interval h2{
+    color: white;
+    text-align: center;
+    font-size: clamp(18px, 3vh, 28px);
+}
+
+.interval select{
+    background-color: green;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Dosis';
+}
+
+.interval input{
+    background-color: green;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Dosis';
+}
+
+.mese p{
+    color: white;
+    font-size: clamp(20px, 3vh, 30px);
+    font-family: 'Dosis';
+    text-align: center;
+}
+
+.masa{
+    min-height: 20vh;
+    min-width: 15vw;
+    background-color: green;
+    border-radius: 20px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-family: 'Molle';
+    transform: rotateY(0deg);
+    transition: 1s ease;
+}
+
+.masa.ocupat{
+    min-height: 20vh;
+    min-width: 15vw;
+    background-color: red;
+    border-radius: 20px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-family: 'Molle';
+    transform: rotateY(0deg);
+    transition: 1s ease;
+}
+
+.mese {
+    display: flex;
+    flex: 1;
+    gap: 5vw;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.masa-container {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    perspective: 1000px;
+}
+
+.masa-card {
+    position: relative;
+    transition: transform 0.6s;
+    transform-style: preserve-3d; 
+}
+
+.masa-container.is-flipped .masa-card {
+    transform: rotateY(180deg);
+}
+
+.face {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    backface-visibility: hidden; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.face.front {
+    background-color: green;
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    position: absolute;
+    backface-visibility: hidden;
+    font-family: 'Dosis';
+}
+
+.face.front:hover{
+    transform: scale(1.05);
+    transition: 0.1s ease-out;
+}
+
+.face.front.ocupat {
+    background-color: #e74c3c;
+    cursor: not-allowed;
+}
+
+.face.back {
+    background-color: green;
+    color: white;
+    border-radius: 10px;
+    transform: rotateY(180deg); 
+    position: absolute;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    font-family: 'Dosis';
+    box-sizing: border-box;
+}
+
+.back input { 
+    width: 60%;
+    margin-bottom: 5px; 
+    border: none;
+    border-radius: 5px;
+    font-family: 'Dosis';
+}
+
+.back button {
+    background-color: green;
+    border: none;
+    border-radius: 30px;
+    margin-top: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.interval select::-webkit-scrollbar {
+    display: none;
+}
+
+.interval select{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

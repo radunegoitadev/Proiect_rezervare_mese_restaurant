@@ -1,0 +1,139 @@
+.container-meniuri{
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    background-image: url(../public/—Pngtree—photo\ of\ a\ black\ slate_12816839.jpg);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+.meniu{
+    width: 90%;
+    height: auto;
+    min-height: 500px;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: 0.1s;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    margin: 15px;
+    padding: 20px;
+}
+
+.meniu:hover{
+    transform:  translateY(-5px);
+    box-shadow: 0 8px 25px rgba(1,1,1,1);
+}
+
+.meniu h2{
+    text-align: center;
+    color: green;
+    font-size: clamp(24px, 4vw, 35px);
+    font-family: 'Lavishly Yours';
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 40px;
+}
+
+.meniu p{
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-top: 35px;
+    color: white;
+    font-family: 'Molle', cursive;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(14px, 1vw, 20px);
+    line-height: 1.4;
+    word-wrap: break-word;
+    border-radius: 23px;
+}
+
+.container-contact{
+    width: 100%;
+    min-height: 350px;
+    background-color: #161821;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 10%;
+    gap: 50px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+}
+
+.informatii-contact{
+    color: white;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.informatii-contact h3{
+    font-family: 'Dosis';
+}
+
+.formular-contact{
+    align-items: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    max-height: 300px;
+}
+
+.formular-contact h2{
+    font-family: 'Dosis';
+    color: white;
+}
+
+.formular-contact input, .formular-contact textarea{
+    font-family: 'Dosis';
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 5px;
+    border: none;
+    box-sizing: border-box;
+}
+
+.formular-contact button{
+    font-family: 'Dosis';
+    width: 100%;
+    font-weight: bold;
+    background-color: green;
+    border-radius: 80px;
+    padding: 10px;
+    border: none;
+}
+
+#foot{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background-color: #161821;
+    display: flex;
+    padding: 20px 0;
+    width: 100%;
+    color: white;
+    margin: 0;
+    border-top: 1px solid rgba(58, 62, 66,0.4);
+    order: 3;
+}
+
+.footer h2{
+    font-family: 'Dosis';
+    font-size: 16px;
+}
