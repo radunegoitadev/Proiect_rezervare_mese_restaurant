@@ -1,56 +1,60 @@
+
 html, body, #root {
     margin: 0;
     padding: 0;
     width: 100%;
-    min-height: 100vh;
+    min-height: 100svh;
     overflow-x: hidden; 
+    background-color: #161821; 
 }
 
 #nav {
-    background-color: green;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+    background-color: rgba(0, 120, 0, 0.85); 
+    backdrop-filter: blur(5px);
     color: white;
     padding-top: 0px;
-    height: 70px;
+    height: 11svh;
     display: flex;
-    width: 100%;
+    width: 100svw;
     align-items: center;
     justify-content: space-between;
-    position: relative;
+    position: fixed;
     z-index: 1000;
 }
 
 .logo{
     width: auto;
-    max-height: 100%;
+    max-height: 85%;
     margin-left: 20px;
 }
 
 #nav #lista{
-    height: 50px;
+    height: 10svh;
     margin: 0;
     padding: 0;
     display: flex;
     list-style: none;
     align-items: center;
-    margin-right: 20px;
+    margin-right: 50px;
 }
 
 #nav #lista li{
     display: flex;
+    letter-spacing: 1px;
     align-items: center;
     justify-content: center;
+    font-weight: 500;
     margin-left: 15px;
-    font-size: clamp(10px, 1.2vw, 18px);
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     white-space: nowrap;
     font-weight: bold;
+    font-size: 1.3rem;
 }
 
 #lista li:hover{
-    color: green;
-    border: 3px solid transparent;
     border-radius: 10px;
-    background-color: white;
+    background-color: transparent;
     padding: 5px 10px;
     transition: all 0.2s ease;
 }
@@ -63,7 +67,7 @@ html, body, #root {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -98,7 +102,7 @@ html, body, #root {
 }
 
 .login-overlay.open {
-    transform: translateY(550px);
+    transform: translateY(590px);
 }
 
 .login-form {
@@ -109,7 +113,7 @@ html, body, #root {
     padding: 20px;
     border: 3px solid transparent;
     border-radius: 10px;
-    background-color: green;
+    background-color: rgba(0, 120, 0, 0.85);
 }
 
 .login-form h2 {
@@ -121,7 +125,7 @@ html, body, #root {
     padding: 12px;
     border-radius: 5px;
     border: none;
-    font-size: 18px;
+    font-size: 18px !important;
     color: black;
 }
 
@@ -151,7 +155,7 @@ html, body, #root {
 }
 
 .register-overlay.open {
-    transform: translateY(550px);
+    transform: translateY(590px);
 }
 
 .register-form {
@@ -162,7 +166,7 @@ html, body, #root {
     padding: 20px;
     border: 3px solid transparent;
     border-radius: 10px;
-    background-color: green;
+    background-color: rgba(0, 120, 0, 0.85);
 }
 
 .register-form h2 {
@@ -174,7 +178,7 @@ html, body, #root {
     padding: 12px;
     border-radius: 5px;
     border: none;
-    font-size: 18px;
+    font-size: 18px !important;
     color: black;
 }
 
@@ -191,26 +195,12 @@ html, body, #root {
 
 #lista li.welcome{
     color: yellow;
-    font-weight: bold;
-    border: 2px solid transparent;
     transition: all 0.2s ease;
-}
-
-#lista li.welcome:hover{
-    background-color: green;
-    border-radius: 5px;
 }
 
 nav .logout{
     color: red;
     transition: all 0.2s ease;
-}
-
-#lista li.logout:hover{
-    color: white;
-    background-color: red;
-    border-radius: 10px;
-    border: 3px solid transparent;
 }
 
 #dashboardadmin {
@@ -256,49 +246,48 @@ nav .logout{
     background-color: #161821;
     min-height: 90vh;
     text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .admin-container h2 {
     color: white;
-    margin-bottom: 30px;
-    font-family: 'Arial', sans-serif;
-    border-bottom: 3px solid #4CAF50;
-    display: inline-block;
+    flex: 1;
+    font-family: 'Dosis';
+    border-bottom: 3px solid green;
     padding-bottom: 10px;
+    max-height: 4vh;
+    margin-bottom: 40px;
+    font-size: 1.7rem;
 }
 
 .utilizatori-table {
     width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 10px;
+    display: table;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-height: 20vh;
+    border-collapse: collapse;
+    background-color: #111111;
+    border-radius: 10px;
+    font-family: 'Dosis';
 }
 
 .utilizatori-table th {
-    background-color: #2e7d32;
+    background-color: green;
     color: white;
     padding: 15px;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 1rem;
     letter-spacing: 1px;
 }
 
 .utilizatori-table td {
     padding: 15px;
-    border-bottom: 1px solid #eee;
-    color: #444;
-    font-size: 15px;
-}
-
-.utilizatori-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-.utilizatori-table tr:hover {
-    background-color: #e8f5e9;
-    transition: 0.3s;
+    color: white;
+    font-size: 1rem;
 }
 
 .password-cell {
@@ -313,13 +302,13 @@ nav .logout{
 
 .admin-actions-bar {
     margin-top: 40px;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background: white;
     border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    flex-wrap: wrap;
 }
 
 .delete-section {
@@ -344,7 +333,7 @@ nav .logout{
 
 .btn-action-delete {
     padding: 12px 20px;
-    background-color: #ff4d4d;
+    background-color: red;
     color: white;
     border: none;
     border-radius: 6px;
@@ -360,10 +349,56 @@ nav .logout{
 .btn-back {
     margin-top: 0;
     padding: 12px 25px;
-    background-color: #4CAF50;
+    background-color: green;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .admin-actions-bar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+
+
+    .delete-section {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .input-delete, .btn-action-delete, .btn-back {
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+    .utilizatori-table {
+        display: block; 
+        overflow-x: auto; 
+        white-space: nowrap; 
+    }
+
+    #nav #lista li{
+        margin-left: 12px;
+        font-size: 1.2rem;
+    }
+
+    #nav #lista {
+        overflow-x: auto;
+        overflow-y: hidden;
+        justify-content: flex-start;
+        padding-right: 20px; 
+        margin-right: 0;
+        
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    #nav #lista::-webkit-scrollbar {
+        display: none; 
+    }
 }

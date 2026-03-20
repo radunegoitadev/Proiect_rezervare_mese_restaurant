@@ -18,6 +18,7 @@
     font-family: 'Dosis';
     padding: 20px;
     gap: 10px;
+    margin-top: 200px;
 }
 
 .interval h2{
@@ -27,26 +28,53 @@
 }
 
 .interval select{
+    flex: 2;
     background-color: green;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 20px;
     font-family: 'Dosis';
+    appearance: none;
+    -webkit-appearance: none;
+    width: 150px;
+    height: 40px;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 1000;
+    transition: background 0.3s ease;
+    text-align: center;
+}
+
+.interval select:focus{
+    outline: none;
+    background-color: rgba(0,180,0,0.5);
+    backdrop-filter: blur(10px);
+}
+
+.interval select option {
+    background-color: green;
+    color: white;
+    padding: 10px;
 }
 
 .interval input{
     background-color: green;
     color: white;
+    height: 20px;
     padding: 10px;
     border: none;
     border-radius: 20px;
     font-family: 'Dosis';
+    font-size: 14px;
+    font-weight: 1000;
+    transition: background 0.3s ease;
+    text-align: center;
 }
 
 .mese p{
     color: white;
-    font-size: clamp(20px, 3vh, 30px);
+    font-size: 1rem;
     font-family: 'Dosis';
     text-align: center;
 }
@@ -100,6 +128,14 @@
     position: relative;
     transition: transform 0.6s;
     transform-style: preserve-3d; 
+}
+
+.masa-card div p{
+    font-size: 1rem;
+}
+
+.txt-rezervat{
+    font-size: 1rem;
 }
 
 .masa-container.is-flipped .masa-card {
@@ -167,6 +203,19 @@
     border: none;
     border-radius: 5px;
     font-family: 'Dosis';
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 .back button {
@@ -180,9 +229,4 @@
 
 .interval select::-webkit-scrollbar {
     display: none;
-}
-
-.interval select{
-    -ms-overflow-style: none;
-    scrollbar-width: none;
 }

@@ -264,8 +264,17 @@ def vizualizare_utilizatori(db: Session = Depends(get_db), utilizator_logat = De
 
 @app.get("/Vezi_propriile_rezervari")
 def Vezi_propria_rezervare(db: Session = Depends(get_db), utilizator_logat = Depends(utilizator_curent)):
-    rezervari = db.query(rezervareDB).filter(rezervareDB.nume_client == utilizator_logat.username).all()
-    return {"mesaj": "Aveti urmatoarele rezervari :", "rezervari": rezervari}
+    rezervari_upcoming = db.query(rezervareDB).filter(rezervareDB.check_in > datetime.now(), utilizator_logat.username == rezervareDB.nume_client).all()
+    for i in rezervari_upcoming:
+        i.status = "Upcoming"
+    rezervari_in_progres = db.query(rezervareDB).filter(rezervareDB.check_in < datetime.now(), utilizator_logat.username == rezervareDB.nume_client, rezervareDB.check_out > datetime.now()).all()
+    for j in rezervari_in_progres:
+        j.status = "Activă"
+    rezervari_finalizate = db.query(rezervareDB).filter(rezervareDB.check_out < datetime.now(), utilizator_logat.username == rezervareDB.nume_client).all()
+    for k in rezervari_finalizate:
+        k.status = "Finalizată"
+    lista_rezervari = rezervari_upcoming + rezervari_in_progres + rezervari_finalizate
+    return lista_rezervari
 
 @app.delete("/Stergere_Utilizator/{id}")
 def Stergere_utlilizator(id: int, db: Session = Depends(get_db), Utilizator_logat = Depends(utilizator_curent)):
@@ -282,12 +291,10 @@ def Stergere_utlilizator(id: int, db: Session = Depends(get_db), Utilizator_loga
 @app.delete("/Stergere_Rezervare/{id}")
 def Sterge_rezervare(id: int, user_logat = Depends(utilizator_curent), db: Session = Depends(get_db)):
     rezervare = db.query(rezervareDB).filter(rezervareDB.id == id).first()
-    if user_logat.rol != "admin":
-        raise HTTPException(status_code=403, detail="Acces nepermis")
     if not rezervare:
         raise HTTPException(status_code=404, detail=" Rezervarea nu a putut fi gasita")
     nume = rezervare.nume_client
-    if rezervare and user_logat.rol == "admin":
+    if rezervare and user_logat.rol == "admin" or user_logat.username == rezervare.nume_client:
         db.delete(rezervare)
         db.commit()
         return {"Status": "Sters cu succes", "message": f"Rezervarea pe numele {nume} cu id-ul {id} a fost ștearsă"}

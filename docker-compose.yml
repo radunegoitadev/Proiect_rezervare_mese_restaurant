@@ -18,9 +18,9 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL= ${DATABASE_URL}
+      - DATABASE_URL=${DATABASE_URL}
     env_file:
-      - .env
+      - ./.env
 
   frontend:
     build: ./restaurant-app

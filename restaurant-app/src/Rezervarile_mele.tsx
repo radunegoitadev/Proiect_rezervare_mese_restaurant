@@ -1,15 +1,14 @@
-import { useState , useEffect } from 'react'
+import { useState, useEffect } from "react";
 
-const Tabel_rezervari = () => {
+const Rezervarile_mele = () => {
     const [rezervari, setrezervari] = useState<any[]>([]);
     const [loading, setloading] = useState(true);
-
     const[id, setid] = useState('');
 
     const incarca_Rezervari = async () => {
         try{
             const token = localStorage.getItem('token');
-            const response =await fetch(`${import.meta.env.VITE_API_URL}/Afiseaza_Rezervarile`, {method: 'GET', headers: {'Authorization': `Bearer ${token}`, 'Content-type': 'application/json'}})
+            const response =await fetch(`${import.meta.env.VITE_API_URL}/Vezi_propriile_rezervari`, {method: 'GET', headers: {'Authorization': `Bearer ${token}`, 'Content-type': 'application/json'}})
 
             if(response.ok){
                 const data_rezervari = await response.json();
@@ -53,13 +52,11 @@ const Tabel_rezervari = () => {
         }
     }
 
-    useEffect(() => {incarca_Rezervari();},[]);
-
-    if(loading) return <p>Rezervarile se incarca</p>
+    useEffect(() => {incarca_Rezervari()}, []);
 
     return(
         <div className='admin-container'>
-            <h2>Gestiune Rezervari</h2>
+            <h2>Rezervările mele</h2>
             <table className='utilizatori-table'>
                 <thead>
                     <tr>
@@ -97,7 +94,6 @@ const Tabel_rezervari = () => {
             </div>
         </div>
     )
-        
 }
 
-export default Tabel_rezervari;
+export default Rezervarile_mele ;

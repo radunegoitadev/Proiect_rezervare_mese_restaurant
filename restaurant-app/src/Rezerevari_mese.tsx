@@ -8,21 +8,9 @@ const Rezervari_mese = () => {
     const [mese, setmese] = useState<any[]>([]);
     const [masa_selectata, setmasa_selectata] = useState<number | null>(null);
     const [numar_persoane, setnumar_persoane] = useState(1);
-    const[are_rezervare, setare_rezervare] = useState<boolean>(false);
-
-    const verifica_rezervare = async () => {
-        const token = localStorage.getItem('token');
-        if (token){
-            try{
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/Are_rezervare`, {method: 'GET', headers: {'Authorization': `Bearer ${token}`,'Content-type': 'application/json'}});
-                const data = await response.json();
-
-                setare_rezervare(data);
-            }catch(error){
-                console.error("Erroare la backend");
-            }
-        }
-    }
+    const peste30ZileDate = new Date();
+    peste30ZileDate.setDate(peste30ZileDate.getDate() + 30);
+    const peste30Zile = peste30ZileDate.toISOString().split('T')[0];
 
     const handleConfirmare = async (numarMasa: number) => {
         const token = localStorage.getItem('token');
@@ -51,7 +39,6 @@ const Rezervari_mese = () => {
                 alert("Rezervare reusita!");
                 setmasa_selectata(null);
                 fetch_mese();
-                verifica_rezervare();
             }
         } else {
             alert("Trebuie sa fiti logat pentru a face o rezervare!");
@@ -91,7 +78,6 @@ const Rezervari_mese = () => {
 
     useEffect(() => {
         fetch_mese();
-        verifica_rezervare();
     }, [start_time, end_time, date])
 
     const ore = ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
@@ -117,15 +103,15 @@ const Rezervari_mese = () => {
 
             <div className="interval">
                 <h2>Data și ora:</h2>
-                <input min={new Date().toISOString().split('T')[0]} onChange={(e) => setdate(e.target.value)} value={date} type="date" />
+                <input max={peste30Zile} onKeyDown={(e) => e.preventDefault()} min={new Date().toISOString().split('T')[0]} onChange={(e) => setdate(e.target.value)} value={date} type="date" />
                 <select onChange={(e) => setstart_time(e.target.value)} value={start_time}>
-                    <option value="">Alege ora</option>
+                    <option value="" disabled>Alege Check-in</option>
                     {oreFiltrate.map(ora => (
                     <option key={ora} value={ora}>{ora}</option>
                     ))};
                 </select>
                 <select onChange={(e) => setend_time(e.target.value)} value={end_time}>
-                    <option value="">Alege ora</option>
+                    <option disabled value="">Alege Check-out</option>
                     {oreFiltrate.map(ora => (
                         <option key={ora} value={ora}>{ora}</option>
                         ))
@@ -140,17 +126,24 @@ const Rezervari_mese = () => {
                         <div className="masa-card">
                             
                             <div className={`face front ${masa.ocupat ? 'ocupat' : 'liber'}`} onClick={() => !masa.ocupat && setmasa_selectata(masa.numar)}>
-                                Masa {masa.numar}
+                                {masa.ocupat ? (
+                                    <span className="txt-rezervat">Rezervat</span>
+                                ):(
+                                    <>
+                                        Masa {masa.numar}
+                                        <p>Max {masa.capacitate} pers</p>
+                                    </>
+                                )}
                             </div>
 
                             <div className="face back">
                                 <label>Persoane:</label>
                                 <input 
-                                    type="number" 
-                                    value={numar_persoane} 
-                                    min="1" 
-                                    max={masa.capacitate} 
-                                    onChange={(e) => setnumar_persoane(parseInt(e.target.value))} 
+                                    type="number"
+                                    value={numar_persoane}
+                                    min="1"
+                                    max={masa.capacitate}
+                                    onChange={(e) => setnumar_persoane(parseInt(e.target.value))}
                                 />
                                 <button onClick={() => handleConfirmare(masa.numar)}>Confirmă</button>
                                 <button className="btn-inchide" onClick={() => setmasa_selectata(null)}>Anulează</button>
@@ -163,10 +156,6 @@ const Rezervari_mese = () => {
                     )
                 }
             </div>
-
-            <div id='foot' className='footer'>
-                <h2>©2026 All Rights Reserved</h2>
-            </div> 
         </div> 
     )
 }

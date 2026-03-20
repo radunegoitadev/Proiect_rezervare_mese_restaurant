@@ -2,15 +2,17 @@ import '../src/style.css'
 import '../src/stil-utilizatori.css'
 import './rezervari.css'
 import React, { useState, useEffect } from 'react'
-import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate, useLocation } from 'react-router-dom';
 import Tabel_utilizatori from './Tabel_utilizatori';
 import Tabel_rezervari from '../src/Tabel_rezervari';
 import Rezervari_mese from './Rezerevari_mese';
 import { jwtDecode } from 'jwt-decode';
+import Rezervarile_mele from './Rezervarile_mele';
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const[are_rezervare, setare_rezervare] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const [LoginUser, setLoginUser] = useState('');
@@ -24,8 +26,17 @@ function App() {
   const [sub, setsub] = useState('');
   const [mes, setmes] = useState('');
 
+  const location = useLocation();
+  const isres_page = location.pathname === "/rezervari/mese";
+  const ismy_res_page = location.pathname === "/rezervarile_mele"
+
   useEffect(() => {
     const handlescroll = () => {
+      const activeElement = document.activeElement?.tagName;
+
+      if (activeElement === 'INPUT' || activeElement === 'TEXTAREA') {
+        return; 
+      }
       if(showLogin) setShowLogin(false);
       if(showRegister) setShowRegister(false);
     }
@@ -36,6 +47,20 @@ function App() {
       window.removeEventListener('scroll', handlescroll);
     }
   }, [showLogin, showRegister])
+
+  useEffect(() => {
+    const handleBack = () => {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    }
+
+    handleBack();
+
+    const timeout = setTimeout(handleBack, 100);
+    return () => clearTimeout(timeout);
+
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -49,6 +74,7 @@ function App() {
         }
         else {
           setLoggedinUser(decodat.sub);
+          verifica_rezervare();
         }
       } catch (error){
         console.error("Token invalid");
@@ -56,6 +82,19 @@ function App() {
       }
     }
   }, [])
+
+  const verifica_rezervare = async () => {
+        const token = localStorage.getItem('token');
+        if (token){
+            try{
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/Are_rezervare`, {method: 'GET', headers: {'Authorization': `Bearer ${token}`,'Content-type': 'application/json'}});
+                const data = await response.json();
+                setare_rezervare(data);
+            }catch(error){
+                console.error("Erroare la backend");
+            }
+        }
+    }
 
   const scroll_to_Contact = () => {
     const element = document.getElementById("foot")
@@ -84,6 +123,7 @@ function App() {
         if (response.ok) {
             localStorage.setItem('token', data.access_token);
             setLoggedinUser(LoginUser);
+            await verifica_rezervare();
             alert("Autentificare reușită!");
             setShowLogin(false);
         } else {
@@ -176,8 +216,17 @@ const handlemail = async (e : React.FormEvent) => {
                   <>
                     <li className='welcome'>Welcome,{LoggedinUser}!</li>
                     <li style={{cursor: 'pointer'}} onClick={() => navigate("/")}>Acasă</li>
-                    <li onClick={() => navigate("/rezervari/mese")} style={{cursor: 'pointer'}}>Rezervă</li>
-                    <li style={{cursor: 'pointer'}} onClick={scroll_to_Contact}>Contact</li>
+                    {!isres_page && !ismy_res_page && (
+                      <>
+                        <li onClick={() => navigate("/rezervari/mese")} style={{cursor: 'pointer'}}>Rezervă</li>
+                        <li style={{cursor: 'pointer'}} onClick={scroll_to_Contact}>Contact</li>
+                      </>
+                    )}
+                    {are_rezervare && isres_page && (
+                      <>
+                        <li onClick={() => navigate("/rezervarile_mele")} style={{cursor: 'pointer'}}>Rezervările mele</li>
+                      </>
+                    )}
                     <li style={{cursor: 'pointer'}} className='logout' onClick={() => {localStorage.removeItem('token'); setLoggedinUser(null); alert("Logged out")}}>Logout</li>
                   </>
                 )
@@ -209,7 +258,7 @@ const handlemail = async (e : React.FormEvent) => {
         <div className={`register-overlay ${showRegister ? 'open' : ''}`}>
           <form onSubmit={handleRegister} className="register-form">
             <h2>Inregistrare</h2>
-            <input value={RegisterUsername} onChange={(e) => setRegisterUsername(e.target.value)} type="text" placeholder='Username' autoFocus />
+            <input value={RegisterUsername} onChange={(e) => setRegisterUsername(e.target.value)} type="text" placeholder='Username'/>
             <input value={RegisterPassword} onChange={(e) => setRegisterPassword(e.target.value)} type="password" placeholder='Parola' />
             <button type='submit'>Creeaza un cont</button>
           </form>
@@ -232,11 +281,6 @@ const handlemail = async (e : React.FormEvent) => {
                 <i className="fas fa-users"></i>
                 <h3>Vezi toti utilizatorii</h3>
                 <p>Administrează conturile și permisiunile.</p>
-              </div>
-              <div className='admin-card delete' style={{cursor: 'pointer'}}>
-                <i className="fas fa-trash-alt"></i>
-                <h3>Sterge o rezervare</h3>
-                <p>Elimină rezervările anulate sau eronate.</p>
               </div>
             </div>
           </>
@@ -298,9 +342,6 @@ const handlemail = async (e : React.FormEvent) => {
               </div>
             </>
           )}
-          <div id='foot' className='footer'>
-            <h2>©2026 All Rights Reserved</h2>
-          </div>
         </section>  
       </>  
     } />
@@ -308,7 +349,11 @@ const handlemail = async (e : React.FormEvent) => {
     <Route path="/admin/utilizatori" element={LoggedinUser === 'radu' ? <Tabel_utilizatori /> : <Navigate to="/" />} />
     <Route path="/admin/rezervari" element={LoggedinUser === 'radu' ? <Tabel_rezervari /> : <Navigate to="/" />} />
     <Route path="/rezervari/mese" element={localStorage.getItem('token') ? <Rezervari_mese /> : <Navigate to="/" />} />
+    <Route path="/rezervarile_mele" element={localStorage.getItem('token') ? <Rezervarile_mele /> : <Navigate to="/" />} />
   </Routes>
+  <div id='foot' className='footer'>
+            <h2>©2026 All Rights Reserved</h2>
+          </div>
   </div>
   );
 }
