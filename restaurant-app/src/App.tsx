@@ -94,7 +94,7 @@ function App() {
                 console.error("Erroare la backend");
             }
         }
-    }
+  }
 
   const scroll_to_Contact = () => {
     const element = document.getElementById("foot")

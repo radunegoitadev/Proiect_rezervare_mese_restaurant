@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 const Rezervarile_mele = () => {
     const [rezervari, setrezervari] = useState<any[]>([]);
-    const [loading, setloading] = useState(true);
     const[id, setid] = useState('');
 
     const incarca_Rezervari = async () => {
@@ -19,8 +18,6 @@ const Rezervarile_mele = () => {
             }
         }catch(error){
             console.error("Erroare la fetch:", error);
-        }finally{
-            setloading(false);
         }
     }
 

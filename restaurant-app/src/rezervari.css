@@ -9,16 +9,15 @@
 }
 
 .interval{
-    display: flex;
-    flex-direction: row;
+    display: grid;
     justify-content: center;
-    flex-wrap: wrap;
+    align-content: end;
     width: auto;
     max-height: 20vh;
     font-family: 'Dosis';
     padding: 20px;
     gap: 10px;
-    margin-top: 200px;
+    margin-top: 140px;
 }
 
 .interval h2{
