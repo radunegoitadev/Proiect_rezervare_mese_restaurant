@@ -11,6 +11,7 @@ const Rezervari_mese = () => {
     const peste30ZileDate = new Date();
     peste30ZileDate.setDate(peste30ZileDate.getDate() + 30);
     const peste30Zile = peste30ZileDate.toISOString().split('T')[0];
+    
 
     const handleConfirmare = async (numarMasa: number) => {
         const token = localStorage.getItem('token');
