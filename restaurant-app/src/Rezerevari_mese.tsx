@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react"
+import toast from "react-hot-toast";
 
 const Rezervari_mese = () => {
     const [start_time, setstart_time] = useState('');
@@ -37,12 +38,12 @@ const Rezervari_mese = () => {
             });
 
             if (response.ok) {
-                alert("Rezervare reusita!");
+                toast.success("Rezervare reusita!");
                 setmasa_selectata(null);
                 fetch_mese();
             }
         } else {
-            alert("Trebuie sa fiti logat pentru a face o rezervare!");
+            toast.error("Trebuie sa fiti logat pentru a face o rezervare!");
         }
     };
 
@@ -53,13 +54,13 @@ const Rezervari_mese = () => {
                 const durataOre = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
 
                 if (durataOre > 4){
-                    alert("Intervalul trebuie sa nu depaseasca 4 ore")
+                    toast.error("Intervalul trebuie sa nu depaseasca 4 ore")
                     setend_time('');
                     return;
                 }
 
                 if (durataOre <= 0){
-                    alert("Va rugam sa alegeti o data valida start < finish")
+                    toast.error("Va rugam sa alegeti o data valida start < finish")
                     setend_time('');
                     return;
                 }

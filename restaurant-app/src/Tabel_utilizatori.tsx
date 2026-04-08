@@ -1,4 +1,5 @@
 import { useState , useEffect } from 'react'
+import toast from 'react-hot-toast';
 
 const Tabel_utilizatori = () => {
     const [utilizatori, setUtilizatori] = useState<any[]>([]);
@@ -21,7 +22,7 @@ const Tabel_utilizatori = () => {
                 const data_utilizatori = await response.json();
                 setUtilizatori(data_utilizatori);
             }
-            else {alert("Nu ai permisiunea de a vedea datele utilizatorilor");}
+            else {toast.error("Nu ai permisiunea de a vedea datele utilizatorilor");}
 
         }catch(error){
             console.error("Eroare la fetch:", error);
@@ -51,10 +52,10 @@ const Tabel_utilizatori = () => {
                 incarca_Utilizatori();
             }
             else{
-                alert(data.detail);
+                toast.error(data.detail);
             }
         }catch(error){
-            alert("Eroare la stergere");
+            toast.error("Eroare la stergere");
         }
     }
 

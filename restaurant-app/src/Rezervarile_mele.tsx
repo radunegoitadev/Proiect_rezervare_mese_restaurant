@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 const Rezervarile_mele = () => {
     const [rezervari, setrezervari] = useState<any[]>([]);
@@ -14,7 +15,7 @@ const Rezervarile_mele = () => {
                 setrezervari(data_rezervari);
             }
             else{
-                alert('Eroare' + 'data.detail');
+                toast.error('Eroare' + 'data.detail');
             }
         }catch(error){
             console.error("Erroare la fetch:", error);
@@ -24,7 +25,7 @@ const Rezervarile_mele = () => {
     const handleStergere = async () => {
 
         if(!id){
-            alert("Trebuie sa alegi un id din lista");
+            toast.loading("Trebuie sa alegi un id din lista");
             return;
         }
 

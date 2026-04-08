@@ -125,7 +125,7 @@ function App() {
             localStorage.setItem('token', data.access_token);
             setLoggedinUser(LoginUser);
             await verifica_rezervare();
-            toast.success("Rezervarea a fost creată cu succes!");
+            toast.success("Logat cu succes!");
             setShowLogin(false);
         } else {
             toast.error("Eroare: " + (data.detail || "Ceva nu a mers bine"));
@@ -154,7 +154,7 @@ const handleRegister = async (e: React.FormEvent) => {
     const data = await response.json();
 
     if(response.ok && !data.Error){
-      alert("Inregistrare reusita!")
+      toast.success("Inregistrare reusita!")
       setShowRegister(false);
     } else{
       alert(data.Error)
@@ -163,7 +163,7 @@ const handleRegister = async (e: React.FormEvent) => {
 
   } catch (error) {
     console.error("Eroare la conexiunea cu severul:", error);
-    alert("Serverul de backend nu este pornit")
+    toast.error("Serverul de backend nu este pornit")
   }
   
 
@@ -187,7 +187,7 @@ const handlemail = async (e : React.FormEvent) => {
     const data = await response.json();
 
     if(response.ok){
-      alert("Vă mulțumim pentru mesaj.");
+      toast.success("Vă mulțumim pentru mesaj.");
       setmail('');
       setmes('');
       setsub('');
