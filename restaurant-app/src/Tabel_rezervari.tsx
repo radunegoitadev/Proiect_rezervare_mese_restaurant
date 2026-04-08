@@ -61,6 +61,7 @@ const Tabel_rezervari = () => {
     return(
         <div className='admin-container'>
             <h2>Gestiune Rezervari</h2>
+            <div className='div-tabel'>
             <table className='utilizatori-table'>
                 <thead>
                     <tr>
@@ -89,6 +90,7 @@ const Tabel_rezervari = () => {
                     }
                 </tbody>
             </table>
+            </div>
             <div className="admin-actions-bar">
                 <button className="btn-back" onClick={() => window.history.back()}>Inapoi</button>
                 <div className="delete-section">

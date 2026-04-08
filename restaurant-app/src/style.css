@@ -377,9 +377,9 @@ nav .logout{
     }
 
     .utilizatori-table {
-        display: block; 
-        overflow-x: auto; 
-        white-space: nowrap; 
+        width: 100%;
+        min-width: 600px; 
+        border-collapse: collapse;
     }
 
     #nav #lista li{
@@ -400,5 +400,10 @@ nav .logout{
 
     #nav #lista::-webkit-scrollbar {
         display: none; 
+    }
+
+    #div-tabel{
+        overflow-x: auto;
+        width: 100%;
     }
 }

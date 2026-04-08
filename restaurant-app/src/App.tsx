@@ -212,7 +212,7 @@ const handlemail = async (e : React.FormEvent) => {
                 <>
                   <li className='welcome'>Welcome,admin!</li>
                   <li style={{cursor: 'pointer'}} onClick={() =>  navigate("/")}>Acasă</li>
-                  <li style={{cursor: 'pointer'}} className='logout' onClick={() => {localStorage.removeItem('token'); setLoggedinUser(null); alert("Logged out")}}>Logout</li>
+                  <li style={{cursor: 'pointer'}} className='logout' onClick={() => {localStorage.removeItem('token'); setLoggedinUser(null); toast("Logged out")}}>Logout</li>
                 </>
                 ) : (
                   <>
@@ -229,7 +229,7 @@ const handlemail = async (e : React.FormEvent) => {
                         <li onClick={() => navigate("/rezervarile_mele")} style={{cursor: 'pointer'}}>Rezervările mele</li>
                       </>
                     )}
-                    <li style={{cursor: 'pointer'}} className='logout' onClick={() => {localStorage.removeItem('token'); setLoggedinUser(null); alert("Logged out")}}>Logout</li>
+                    <li style={{cursor: 'pointer'}} className='logout' onClick={() => {localStorage.removeItem('token'); setLoggedinUser(null); toast("Logged out")}}>Logout</li>
                   </>
                 )
               }

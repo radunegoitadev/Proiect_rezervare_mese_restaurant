@@ -66,6 +66,7 @@ const Tabel_utilizatori = () => {
     return(
         <div className="admin-container">
             <h2>Gestiune Utilizatori</h2>
+            <div className='div-tabel'>
             <table className='utilizatori-table'>
                 <thead>
                     <tr>
@@ -86,6 +87,7 @@ const Tabel_utilizatori = () => {
                     ))}
                 </tbody>
             </table>
+            </div>
             <div className="admin-actions-bar">
                 <button className="btn-back" onClick={() => window.history.back()}>Inapoi</button>
                 <div className="delete-section">
