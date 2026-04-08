@@ -8,6 +8,7 @@ import Tabel_rezervari from '../src/Tabel_rezervari';
 import Rezervari_mese from './Rezerevari_mese';
 import { jwtDecode } from 'jwt-decode';
 import Rezervarile_mele from './Rezervarile_mele';
+import {Toaster, toast} from 'react-hot-toast';
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -124,14 +125,14 @@ function App() {
             localStorage.setItem('token', data.access_token);
             setLoggedinUser(LoginUser);
             await verifica_rezervare();
-            alert("Autentificare reușită!");
+            toast.success("Rezervarea a fost creată cu succes!");
             setShowLogin(false);
         } else {
-            alert("Eroare: " + (data.detail || "Ceva nu a mers bine"));
+            toast.error("Eroare: " + (data.detail || "Ceva nu a mers bine"));
         }
     } catch (error) {
         console.error("Eroare la conexiunea cu serverul:", error);
-        alert("Serverul backend nu este pornit!");
+        toast.error("Serverul backend nu este pornit!");
     }
 };
 
@@ -200,6 +201,7 @@ const handlemail = async (e : React.FormEvent) => {
 
   return (
     <div className="app-container">
+      <Toaster position='top-center' reverseOrder={false} />
       <section id="nav">
         <img className='logo' src='/logo.png' alt="" />
         <ul id="lista">
