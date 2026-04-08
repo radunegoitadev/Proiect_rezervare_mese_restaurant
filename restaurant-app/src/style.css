@@ -402,7 +402,7 @@ nav .logout{
         display: none; 
     }
 
-    #div-tabel{
+    .div-tabel{
         overflow-x: auto;
         width: 100%;
     }
