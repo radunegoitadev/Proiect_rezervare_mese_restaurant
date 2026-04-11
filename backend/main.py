@@ -1,4 +1,4 @@
-from fastapi import FastAPI,HTTPException,Depends
+from fastapi import FastAPI,HTTPException,Depends,WebSocket,WebSocketDisconnect
 from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta
 from fastapi.middleware.cors import CORSMiddleware
@@ -71,6 +71,23 @@ engine = create_engine(DATABASE_URL)
 sesiune_locala = sessionmaker(autoflush = False, autocommit = False, bind=engine)
 baza = declarative_base()
 
+class ConnectionManager():
+    def __init__(self):
+        self.active_connections: list[WebSocket] = []
+    
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+    
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
+
+manager = ConnectionManager()
+
 class rezervare(BaseModel): 
     nume : str
     masa : int
@@ -123,8 +140,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while(True):
+            data = await websocket.receive_text()
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+
 @app.post("/Adaugarerezervare")
-def adauga_rezervare(interval: rezervare, db: Session = Depends(get_db)):
+async def adauga_rezervare(interval: rezervare, db: Session = Depends(get_db)):
     timp_curent = datetime.now()
     if interval.start.minute != 0 or interval.start.second != 0:
         raise HTTPException(status_code=400, detail="Rezervarile se pot face doar la ore fixe")
@@ -145,6 +171,7 @@ def adauga_rezervare(interval: rezervare, db: Session = Depends(get_db)):
             noua_rezervare = rezervareDB(nume_client = interval.nume, masa = interval.masa, persoane = interval.persoane, check_in = interval.start, check_out = interval.end, status = "Nedeterminat")
             db.add(noua_rezervare)
             db.commit()
+            await manager.broadcast("NOUA_REZERVARE")
             return{"Status": "Rezervarea a fost salvata in baza de date"}
     else:
         raise HTTPException(status_code=400, detail="Masa nu are loc pentru atatea persoane")

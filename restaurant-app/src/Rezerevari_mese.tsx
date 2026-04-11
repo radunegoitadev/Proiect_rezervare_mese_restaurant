@@ -80,6 +80,20 @@ const Rezervari_mese = () => {
 
     useEffect(() => {
         fetch_mese();
+        const api_url = import.meta.env.VITE_API_URL;
+        const websocket_url = api_url.replace("http", "ws") + "/ws";
+        const socket = new WebSocket(websocket_url);
+
+        socket.onmessage = (event) => {
+            if (event.data === "NOUA_REZERVARE"){
+                fetch_mese();
+            }
+        }
+
+        return () => {
+            socket.close();
+        };
+
     }, [start_time, end_time, date])
 
     const ore = ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];

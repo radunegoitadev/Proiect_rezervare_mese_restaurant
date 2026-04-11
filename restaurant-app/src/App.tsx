@@ -157,7 +157,7 @@ const handleRegister = async (e: React.FormEvent) => {
       toast.success("Inregistrare reusita!")
       setShowRegister(false);
     } else{
-      alert(data.Error)
+      toast.error(data.Error)
     }
 
 
@@ -187,15 +187,15 @@ const handlemail = async (e : React.FormEvent) => {
     const data = await response.json();
 
     if(response.ok){
-      toast.success("Vă mulțumim pentru mesaj.");
+      toast("Vă mulțumim pentru mesaj.", {icon: "😊"});
       setmail('');
       setmes('');
       setsub('');
     }else{
-      alert(data.detail)
+      toast(data.detail);
     }
   }catch(error){
-    return("Serverul de backend nu functioneaza")
+    return("Serverul de backend nu functioneaza");
   }
 }
 
