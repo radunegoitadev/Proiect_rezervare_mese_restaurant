@@ -84,7 +84,12 @@ const Rezervari_mese = () => {
         const websocket_url = api_url.replace("http", "ws") + "/ws";
         const socket = new WebSocket(websocket_url);
 
+        socket.onopen = () => console.log("Conectat cu succes");
+        socket.onerror = () => console.log("Eroare");
+        socket.onclose = () => console.log("Deconectat")
+
         socket.onmessage = (event) => {
+            console.log("Mesaj primit");
             if (event.data === "NOUA_REZERVARE"){
                 fetch_mese();
             }
