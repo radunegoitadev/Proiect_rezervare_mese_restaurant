@@ -9,23 +9,10 @@ from sqlalchemy.orm import sessionmaker,Session,declarative_base
 from passlib.context import CryptContext
 from jose import jwt,JWTError
 import uvicorn
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
-conf = ConnectionConfig(
-    MAIL_USERNAME= os.getenv("MAIL_USERNAME"),
-    MAIL_PASSWORD= os.getenv("MAIL_PASSWORD"),
-    MAIL_FROM= os.getenv("MAIL_USERNAME"),
-    MAIL_PORT= 465,
-    MAIL_SERVER= "smtp.gmail.com",
-    MAIL_STARTTLS = False,
-    MAIL_SSL_TLS = True,
-    USE_CREDENTIALS = True,
-    VALIDATE_CERTS = True
-)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -335,18 +322,5 @@ def Adaugare_masa(nr: int, user_logat = Depends(utilizator_curent), db : Session
         db.commit()
         return{"Status":"Succes", "detalii":"Masa a fost adaugata cu succes"}
 
-@app.post("/Trimite_mail")
-async def Mail(data: contact):
-    message = MessageSchema(
-        subject=f"Mesaj nou de la {data.email}: {data.subiect}",
-        recipients= ["iamradubtwsss@gmail.com"],
-        body=f"{data.mesaj}",
-        subtype= MessageType.plain,
-        reply_to=[data.email]
-    )
-    
-    fm = FastMail(conf)
-    await fm.send_message(message)
-    return {"Status" : "Succes", "Mesaj": "Mesajul a fost trimis si inregistrat"}
 if __name__=="__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)

@@ -7,7 +7,6 @@ python-jose[cryptography]
 passlib
 bcrypt == 4.2.0
 python-multipart
-fastapi-mail
 websockets
 numpy
 python-dotenv

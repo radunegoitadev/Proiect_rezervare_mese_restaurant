@@ -9,6 +9,7 @@ import Rezervari_mese from './Rezerevari_mese';
 import { jwtDecode } from 'jwt-decode';
 import Rezervarile_mele from './Rezervarile_mele';
 import {Toaster, toast} from 'react-hot-toast';
+import emailjs from '@emailjs/browser';
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -22,10 +23,6 @@ function App() {
   const [RegisterPassword, setRegisterPassword] = useState('');
 
   const [LoggedinUser, setLoggedinUser] = useState<string | null>(null);
-
-  const [mail, setmail] = useState('');
-  const [sub, setsub] = useState('');
-  const [mes, setmes] = useState('');
 
   const location = useLocation();
   const isres_page = location.pathname === "/rezervari/mese";
@@ -170,33 +167,38 @@ const handleRegister = async (e: React.FormEvent) => {
 }
 
 
+  const [email, setemail] = useState('');
+  const [subiect, setsubiect] = useState('');
+  const [mesaj, setmesaj] = useState('');
+
+
 const handlemail = async (e : React.FormEvent) => {
   e.preventDefault();
 
-  try{
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/Trimite_mail`, {
-      method: 'POST',
-      headers: {'Content-type': 'application/json'},
-      body: JSON.stringify({
-        email: mail,
-        subiect: sub,
-        mesaj: mes
-      })
-    })
-
-    const data = await response.json();
-
-    if(response.ok){
-      toast("Vă mulțumim pentru mesaj.", {icon: "😊"});
-      setmail('');
-      setmes('');
-      setsub('');
-    }else{
-      toast(data.detail);
-    }
-  }catch(error){
-    return("Serverul de backend nu functioneaza");
+  const templateParams = {
+    email: email,
+    subiect: subiect,
+    mesaj: mesaj,
   }
+
+  try{
+    await emailjs.send(
+      'Restaurant delizia',
+      'template_f97dkp3',
+      templateParams,
+      'UZu9uAwqhsv5-MGNN'
+      );
+
+      toast("Vă mulțumim pentru mesaj.", {icon: "😊"});
+
+      setemail('');
+      setsubiect('');
+      setmesaj('');
+
+    }catch(error){
+      console.error("Eroare EmailJS:", error);
+      toast.error("Eroare la trimitere. Încearcă din nou.");
+    }
 }
 
   return (
@@ -335,9 +337,9 @@ const handlemail = async (e : React.FormEvent) => {
                 <div className='formular-contact'>
                   <form onSubmit={handlemail} action="submit">
                     <h2>Părerea ta contează</h2>
-                    <input required value={mail} onChange={(e) => setmail(e.target.value)} placeholder='Introduceți Email-ul' type="email" />
-                    <input required value={sub} onChange={(e) => setsub(e.target.value)} placeholder='Subiect' type="text" />
-                    <textarea required value={mes} onChange={(e) => setmes(e.target.value)} placeholder='Mesaj' name="Mesaj" id="m"></textarea>
+                    <input required value={email} onChange={(e) => setemail(e.target.value)} placeholder='Introduceți Email-ul' type="email" />
+                    <input required value={subiect} onChange={(e) => setsubiect(e.target.value)} placeholder='Subiect' type="text" />
+                    <textarea required value={mesaj} onChange={(e) => setmesaj(e.target.value)} placeholder='Mesaj' name="Mesaj" id="m"></textarea>
                     <button type='submit'>Trimite</button>
                   </form>
                 </div>
