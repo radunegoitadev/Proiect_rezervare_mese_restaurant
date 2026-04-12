@@ -210,7 +210,7 @@ const handlemail = async (e : React.FormEvent) => {
 
   return (
     <div className="app-container">
-      <Toaster position='top-center' reverseOrder={false} toastOptions={{style: {backgroundColor: 'black', color: 'green'}, success: {iconTheme: {primary: 'green', secondary: 'black'}}, error: {iconTheme: {primary: 'green', secondary: 'black'}}}} />
+      <Toaster position='top-center' reverseOrder={false} toastOptions={{style: {backgroundColor: 'black', color: 'green', fontFamily: 'Lavishly Yours'}, success: {iconTheme: {primary: 'green', secondary: 'black'}}, error: {iconTheme: {primary: 'green', secondary: 'black'}}}} />
       <section id="nav">
         <img className='logo' src='/logo.png' alt="" />
         <ul id="lista">
