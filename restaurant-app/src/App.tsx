@@ -28,6 +28,19 @@ function App() {
   const isres_page = location.pathname === "/rezervari/mese";
   const ismy_res_page = location.pathname === "/rezervarile_mele"
 
+  const verifica_rezervare = async () => {
+        const token = localStorage.getItem('token');
+        if (token){
+            try{
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/Are_rezervare`, {method: 'GET', headers: {'Authorization': `Bearer ${token}`,'Content-type': 'application/json'}});
+                const data = await response.json();
+                setare_rezervare(data);
+            }catch(error){
+                console.error("Erroare la backend");
+            }
+        }
+  }
+
   useEffect(() => {
     const handlescroll = () => {
       const activeElement = document.activeElement?.tagName;
@@ -69,6 +82,7 @@ function App() {
         if (decodat.exp * 1000 < Date.now()){
           localStorage.removeItem('token');
           setLoggedinUser(null);
+          setare_rezervare(false);
         }
         else {
           setLoggedinUser(decodat.sub);
@@ -77,25 +91,18 @@ function App() {
       } catch (error){
         console.error("Token invalid");
         localStorage.removeItem('token');
+        setLoggedinUser(null);
       }
     }
+
+    verifica_rezervare();
+
+    window.addEventListener("update_Navbar", verifica_rezervare);
+    return () => window.removeEventListener("update_Navbar", verifica_rezervare)
   }, [])
 
-  const verifica_rezervare = async () => {
-        const token = localStorage.getItem('token');
-        if (token){
-            try{
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/Are_rezervare`, {method: 'GET', headers: {'Authorization': `Bearer ${token}`,'Content-type': 'application/json'}});
-                const data = await response.json();
-                setare_rezervare(data);
-            }catch(error){
-                console.error("Erroare la backend");
-            }
-        }
-  }
-
   const scroll_to_Contact = () => {
-    const element = document.getElementById("foot")
+    const element = document.getElementById("foot");
     if(element){
       element.scrollIntoView({behavior: 'smooth'})
     }
@@ -203,7 +210,7 @@ const handlemail = async (e : React.FormEvent) => {
 
   return (
     <div className="app-container">
-      <Toaster position='top-center' reverseOrder={false} />
+      <Toaster position='top-center' reverseOrder={false} toastOptions={{style: {backgroundColor: 'green'}, success: {iconTheme: {primary: 'green', secondary: 'black'}}}} />
       <section id="nav">
         <img className='logo' src='/logo.png' alt="" />
         <ul id="lista">

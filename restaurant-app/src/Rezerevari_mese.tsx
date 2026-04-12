@@ -39,6 +39,7 @@ const Rezervari_mese = () => {
 
             if (response.ok) {
                 toast.success("Rezervare reusita!");
+                window.dispatchEvent(new Event("update_Navbar"));
                 setmasa_selectata(null);
                 fetch_mese();
             }
@@ -54,13 +55,13 @@ const Rezervari_mese = () => {
                 const durataOre = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
 
                 if (durataOre > 4){
-                    toast.error("Intervalul trebuie sa nu depaseasca 4 ore")
+                    toast.error("Intervalul trebuie sa nu depaseasca 4 ore");
                     setend_time('');
                     return;
                 }
 
                 if (durataOre <= 0){
-                    toast.error("Va rugam sa alegeti o data valida start < finish")
+                    toast.error("Va rugam sa alegeti o data valida start < finish");
                     setend_time('');
                     return;
                 }
@@ -86,7 +87,7 @@ const Rezervari_mese = () => {
 
         socket.onopen = () => console.log("Conectat cu succes");
         socket.onerror = () => console.log("Eroare");
-        socket.onclose = () => console.log("Deconectat")
+        socket.onclose = () => console.log("Deconectat");
 
         socket.onmessage = (event) => {
             console.log("Mesaj primit");
