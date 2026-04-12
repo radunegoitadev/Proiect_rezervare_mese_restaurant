@@ -168,6 +168,7 @@
     position: absolute;
     backface-visibility: hidden;
     font-family: 'Dosis';
+    transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
 }
 
 .face.front:hover{
