@@ -26,7 +26,10 @@ function App() {
 
   const location = useLocation();
   const isres_page = location.pathname === "/rezervari/mese";
-  const ismy_res_page = location.pathname === "/rezervarile_mele"
+  const ismy_res_page = location.pathname === "/rezervarile_mele";
+  const [email, setemail] = useState('');
+  const [subiect, setsubiect] = useState('');
+  const [mesaj, setmesaj] = useState('');
 
   const verifica_rezervare = async () => {
         const token = localStorage.getItem('token');
@@ -138,79 +141,70 @@ function App() {
         console.error("Eroare la conexiunea cu serverul:", error);
         toast.error("Serverul backend nu este pornit!");
     }
-};
+  };
 
-const handleRegister = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  try{
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
-      method: 'POST',
-      headers: {
+    try{
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
+        method: 'POST',
+        headers: {
         'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: RegisterUsername,
-        password: RegisterPassword
-      }),
-    });
+        },
+        body: JSON.stringify({
+          username: RegisterUsername,
+          password: RegisterPassword
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if(response.ok && !data.Error){
-      toast.success("Inregistrare reusita!")
-      setShowRegister(false);
-    } else{
-      toast.error(data.Error)
+      if(response.ok && !data.Error){
+        toast.success("Inregistrare reusita!")
+        setShowRegister(false);
+      } else{
+        toast.error(data.Error)
+      }
+
+
+    } catch (error) {
+      console.error("Eroare la conexiunea cu severul:", error);
+      toast.error("Serverul de backend nu este pornit")
     }
-
-
-  } catch (error) {
-    console.error("Eroare la conexiunea cu severul:", error);
-    toast.error("Serverul de backend nu este pornit")
-  }
-  
-
-}
-
-
-  const [email, setemail] = useState('');
-  const [subiect, setsubiect] = useState('');
-  const [mesaj, setmesaj] = useState('');
-
-
-const handlemail = async (e : React.FormEvent) => {
-  e.preventDefault();
-
-  const templateParams = {
-    email: email,
-    subiect: subiect,
-    mesaj: mesaj,
   }
 
-  try{
-    await emailjs.send(
-      'Restaurant delizia',
-      'template_f97dkp3',
-      templateParams,
-      'UZu9uAwqhsv5-MGNN'
-      );
+  const handlemail = async (e : React.FormEvent) => {
+    e.preventDefault();
 
-      toast("Vă mulțumim pentru mesaj.", {icon: "😊"});
-
-      setemail('');
-      setsubiect('');
-      setmesaj('');
-
-    }catch(error){
-      console.error("Eroare EmailJS:", error);
-      toast.error("Eroare la trimitere. Încearcă din nou.");
+    const templateParams = {
+      email: email,
+      subiect: subiect,
+      mesaj: mesaj,
     }
-}
+
+    try{
+      await emailjs.send(
+        'Restaurant delizia',
+        'template_f97dkp3',
+        templateParams,
+        'UZu9uAwqhsv5-MGNN'
+        );
+
+        toast("Vă mulțumim pentru mesaj.", {icon: "😊"});
+
+        setemail('');
+        setsubiect('');
+        setmesaj('');
+      }catch(error){
+        console.error("Eroare EmailJS:", error);
+        toast.error("Eroare la trimitere. Încearcă din nou.");
+      }
+  }
 
   return (
     <div className="app-container">
-      <Toaster position='top-center' reverseOrder={false} toastOptions={{style: {backgroundColor: 'black', color: 'white', fontFamily: 'Lavishly Yours, cursive'}, success: {iconTheme: {primary: 'green', secondary: 'black'}}, error: {iconTheme: {primary: 'green', secondary: 'black'}}}} />
+      <Toaster position='top-center' reverseOrder={false} toastOptions={{style: {backgroundColor: 'black', color: 'white'}, success: {iconTheme: {primary: 'green', secondary: 'white'}}, error: {iconTheme: {primary: 'red', secondary: 'white'}}}} />
       <section id="nav">
         <img className='logo' src='/logo.png' alt="" />
         <ul id="lista">
